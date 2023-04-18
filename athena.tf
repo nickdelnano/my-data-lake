@@ -16,9 +16,15 @@ locals {
 resource "aws_athena_workgroup" "main" {
   name = "main"
 
+
   configuration {
     enforce_workgroup_configuration    = true
     publish_cloudwatch_metrics_enabled = true
+    bytes_scanned_cutoff_per_query = 10737418240 // 10GB
+
+    engine_version {
+      selected_engine_version = "Athena engine version 3" // Use V3 engine to get new features
+    }
 
     result_configuration {
       output_location = "s3://${aws_s3_bucket.data-lake.bucket}/athena_output/"
